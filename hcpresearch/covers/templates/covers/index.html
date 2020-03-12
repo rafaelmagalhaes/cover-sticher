@@ -1,0 +1,78 @@
+{% load static %}
+<!doctype html>
+<html class="no-js" lang="">
+
+<head>
+    <meta charset="utf-8">
+    <title>HarperCollins Research - Covers</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="{% static 'covers/css/normalize.css' %}">
+    <link rel="stylesheet" href="{% static 'covers/css/main.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'covers/semantic/semantic.min.css' %}">
+    <script
+            src="https://code.jquery.com/jquery-3.1.1.min.js"
+            integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+            crossorigin="anonymous"></script>
+    <script src="{% static 'covers/semantic/semantic.min.js' %}"></script>
+
+    <meta name="theme-color" content="#fafafa">
+</head>
+
+<body>
+<div class="ui container">
+    <h1>HarperCollins Publishers - Cover Stitcher</h1>
+    <div class="ui divider"></div>
+    <p>Enter a comma delimited list of ISBNs and a name for your collage and hit the button to receive an image of the
+        covers combined</p>
+
+    <div class="ui fluid icon input form">
+        <form class="flex" id="submit">
+            {% csrf_token %}
+            <div class="field">
+                <label>ISBNS
+                    <small>(use comma to enter up to 6 ISBNS)</small>
+                </label>
+                <textarea id='search' onchange="value = removeSpace(value)" rows="4" required>9780132350884,9781491946008,9781491954621,9781491912058,9781942788003</textarea>
+            </div>
+
+            <div class="field">
+                <label>Name</label>
+                <input
+                        type="text"
+                        id="name"
+                        placeholder="Please enter a name"
+                        required
+                />
+            </div>
+            <button class="ui button search-btn primary" id="submit-btn" type="submit">
+                <i class="cut icon" id='search-icon'></i> Stitch It!
+            </button>
+        </form>
+    </div>
+    <div class="ui divider"></div>
+    <div class="ui four column doubling stackable grid container" id="results">
+        {% for cover in covers %}
+        <div class="column">
+            <div class="ui card">
+                <div class="image">
+                    <img src="http://localhost:8000/media/{{cover.cover_image}}">
+                </div>
+                <div class="content">
+                    <a class="header">{{cover.name}}</a>
+                    <div class="meta">
+                        <span class="date">{{cover.created_at}}</span>
+                    </div>
+                    <div class="description">
+                        {{cover.total_amount}} books.
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <script src="{% static 'covers/main.js' %}"></script>
+</body>
+
+</html>
